@@ -10,6 +10,7 @@ public class PhotonManager : Photon.MonoBehaviour
 		CONTROLLER,
 		MAX,
 	}
+	//tehepero
 	[SerializeField] public bool othersRollGot;
 	[SerializeField] public ROLL myRoll;
 	[SerializeField] public ROLL othersRoll;
