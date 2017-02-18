@@ -38,12 +38,15 @@ public class Turn : Photon.MonoBehaviour
 	public Text counttext;
 	public Text result;
 
+	TurnManager turnManager;
+
 	// Use this for initialization
 	void Start ()
 	{   
 		if (PhotonNetwork.isMasterClient == true) {
 			PhotonNetwork.Instantiate ("TurnManager", Vector3.zero, Quaternion.identity, 0);
 		}
+		StartCoroutine ("Init");
 		
 		RSP [0] = "Rock";
 		RSP [1] = "Scissors";
@@ -110,7 +113,7 @@ public class Turn : Photon.MonoBehaviour
 			}
 			if (firstpoint < 0) {
 				turn = 0;
-			}
+			} 
 			if (firstpoint > 0) {
 				turn = 3;
 			}
@@ -122,8 +125,6 @@ public class Turn : Photon.MonoBehaviour
 					turn = 3;
 				}
 			}
-		} else {
-			SyncVariables ();
 		}
 
 		instantiateposition [0] = new Vector3 (0, 0, 0);
@@ -132,14 +133,21 @@ public class Turn : Photon.MonoBehaviour
 		instantiateposition [3] = new Vector3 (4, 7, 0);
 	}
 
+	IEnumerator Init(){
+		Debug.Log ("TurnManagerを探しはじめました");
+		for (;;) {
+			if (FindObjectOfType<TurnManager> () != null) {
+				turnManager = FindObjectOfType<TurnManager> ();
+				break;
+			}
+			yield return new WaitForSeconds (0.1f);
+		}
+		Debug.Log ("TurnManagerを発見しました");
+	}
+
 	// Update is called once per frame
 	void Update ()
-	{
-		FindObjectOfType<TurnManager> ().turn = turn;
-	    
-		if (PhotonNetwork.isMasterClient == true) {
-			
-		}
+	{ 
 
 		if (turn < 2) {
 			turntext.text = "Player1";
@@ -420,19 +428,5 @@ public class Turn : Photon.MonoBehaviour
 		} else {
 			return false;
 		}
-	}
-
-	void OnPhotonSerializeView (PhotonStream stream, PhotonMessageInfo info)
-	{
-		if (stream.isWriting) {
-			stream.SendNext (firstpoint);
-		} else {
-			currentfirstpoint = ((int)stream.ReceiveNext ());
-		}
-	}
-
-	void SyncVariables ()
-	{
-		this.firstpoint = currentfirstpoint;
 	}
 }

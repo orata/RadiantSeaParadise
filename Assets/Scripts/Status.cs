@@ -5,7 +5,10 @@ public class Status : Photon.MonoBehaviour
 {
 	public int status;
 	public Vector3 currentPosition;
-	public GameObject TurnManager;
+	public GameObject camera;
+	public Quaternion currentRotation;
+
+	TurnManager turnManager;
 
 	void Awake ()
 	{
@@ -24,6 +27,19 @@ public class Status : Photon.MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		StartCoroutine ("Init");
+	}
+
+	IEnumerator Init(){
+		Debug.Log ("TurnManagerを探しはじめました");
+		for (;;) {
+			if (FindObjectOfType<TurnManager> () != null) {
+				turnManager = FindObjectOfType<TurnManager> ();
+				break;
+			}
+			yield return new WaitForSeconds (0.1f);
+		}
+		Debug.Log ("TurnManagerを発見しました");
 
 	}
 
@@ -34,12 +50,14 @@ public class Status : Photon.MonoBehaviour
 			stream.SendNext (this.transform.rotation);
 		} else {
 			currentPosition = ((Vector3)stream.ReceiveNext ());
+			currentRotation = ((Quaternion)stream.ReceiveNext ());
 		}
 	}
 
 	void SyncVariables ()
 	{
 		this.transform.position = currentPosition;
+		this.transform.rotation = currentRotation;
 	}
 
 	// Update is called once per frame
@@ -47,17 +65,9 @@ public class Status : Photon.MonoBehaviour
 	{
 		if (!photonView.isMine) {
 			//photonで値を同期
-			if (TurnManager.GetComponent<Turn> ().turn < 3) {
+			if (turnManager.turn <= 3) {
 				SyncVariables ();
 			}
-		} else {
-			if (TurnManager.GetComponent<Turn> ().turn >= 3){
-				SyncVariables ();
-			}
-			//自分のオブジェクトは自分で動かす
 		}
-
 	}
-
-
 }
