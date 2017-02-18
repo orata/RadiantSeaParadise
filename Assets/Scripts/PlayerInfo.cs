@@ -10,6 +10,10 @@ public class PlayerInfo : Photon.MonoBehaviour
 
 	PhotonView myPhotonView;
 
+	void Awake(){
+		DontDestroyOnLoad (this.gameObject);
+	}
+
 	void Start ()
 	{
 		battlePoint = 1000;

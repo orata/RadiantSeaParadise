@@ -46,7 +46,7 @@ public class UImanager : Photon.MonoBehaviour {
 	}
 
 	void Instantiate () {
-		GameObject obj1 = PhotonNetwork.Instantiate ("RSP [RSPnumber]", camera.GetComponent<Turn> ().moveObj.transform.position, Quaternion.identity,0) as GameObject;
+		GameObject obj1 = PhotonNetwork.Instantiate ("RSP [RSPnumber]", GetComponent<Camera>().GetComponent<Turn> ().moveObj.transform.position, Quaternion.identity,0) as GameObject;
 		camera.GetComponent<Turn> ().count++;
 		if (camera.GetComponent<Turn> ().turn < 3) {
 			obj1.tag = "Player1";

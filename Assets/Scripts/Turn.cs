@@ -4,32 +4,35 @@ using UnityEngine.UI;
 
 public class Turn : Photon.MonoBehaviour
 {
+	
 	public int turn;
 	public int count = 3;
 	public int[] counter = new int[2];
+	public int currentfirstpoint;
 	int moveObjstatus;
 	int blockstatus;
 	int[] firstatack = new int[6];
-	int firstpoint;
-	int timelimit = 75;
-	int countturn;
-	int[] span = new int[2];
-	int[] killedstatus = new int[3000];
+	public int firstpoint;
+	public int timelimit = 75;
+	public int countturn;
+	public int[] span = new int[2];
+	public int[] killedstatus = new int[3000];
 	float timer;
 	public string[] RSP = new string[3];
 	public GameObject block; 
 	public GameObject[] button = new GameObject[2];
 	public GameObject[] instantiatebutton = new GameObject[3];
+	public GameObject TurnManager;
 	GameObject destinationObj;
 	public GameObject moveObj;
 	GameObject[] piece = new GameObject[6];
-	GameObject[] piecelog = new GameObject[3000];
+	public GameObject[] piecelog = new GameObject[3000];
 	bool[] flag = new bool[6];
-	bool[] killedpiece = new bool[3000];
+	public bool[] killedpiece = new bool[3000];
 	Vector3[] firstposition = new Vector3[6];
 	Vector3[] instantiateposition = new Vector3[4];
-	Vector3[] positionlog = new Vector3[3000];
-	Vector3[] prepositionlog = new Vector3[3000];
+	public Vector3[] positionlog = new Vector3[3000];
+	public Vector3[] prepositionlog = new Vector3[3000];
 	public Text turntext;
 	public Text timetext;
 	public Text counttext;
@@ -38,11 +41,14 @@ public class Turn : Photon.MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{   
+		if (PhotonNetwork.isMasterClient == true) {
+			PhotonNetwork.Instantiate ("TurnManager", Vector3.zero, Quaternion.identity, 0);
+		}
+		
 		RSP [0] = "Rock";
 		RSP [1] = "Scissors";
 		RSP [2] = "Paper";
 		//ブロック生成
-		if (photonView.isMine) {
 			for (int i = 0; i < 8; i++) {
 				for (int j = 0; j < 5; j++) {
 					GameObject obj = Instantiate (block, new Vector3 (j, i, 0), Quaternion.identity) as GameObject;
@@ -71,6 +77,7 @@ public class Turn : Photon.MonoBehaviour
 			firstposition [4] = new Vector3 (2, 6, 0);
 			firstposition [5] = new Vector3 (3, 7, 0);
 			//グーチョキパー生成
+		if (photonView.isMine) {
 			for (int a = 0; a < 2; a++) {
 				int c = 0;
 				while (flag [0 + a * 3] == false || flag [1 + a * 3] == false || flag [2 + a * 3] == false) {
@@ -90,42 +97,54 @@ public class Turn : Photon.MonoBehaviour
 					}
 				}
 			}
-		}
 
-		//先攻決定
-		for (int i = 0; i < 3; i++) {
-			if (firstatack [0 + i] == 0 && firstatack [3 + i] == 1 || firstatack [0 + i] == 1 && firstatack [3 + i] == 2 || firstatack [0 + i] == 2 && firstatack [3 + i] == 0) {
-				firstpoint++;
+			//先攻決定
+			for (int i = 0; i < 3; i++) {
+				if (firstatack [0 + i] == 0 && firstatack [3 + i] == 1 || firstatack [0 + i] == 1 && firstatack [3 + i] == 2 || firstatack [0 + i] == 2 && firstatack [3 + i] == 0) {
+					firstpoint++;
 
+				}
+				if (firstatack [0 + i] == 1 && firstatack [3 + i] == 0 || firstatack [0 + i] == 2 && firstatack [3 + i] == 1 || firstatack [0 + i] == 0 && firstatack [3 + i] == 2) {
+					firstpoint--;
+				}
 			}
-			if (firstatack [0 + i] == 1 && firstatack [3 + i] == 0 || firstatack [0 + i] == 2 && firstatack [3 + i] == 1 || firstatack [0 + i] == 0 && firstatack [3 + i] == 2) {
-				firstpoint--;
-			}
-		}
-		if (firstpoint < 0) {
-			turn = 0;
-		}
-		if (firstpoint > 0) {
-			turn = 3;
-		}
-		if (firstpoint == 0) {
-			int a = Random.Range (0, 2);
-			if (a == 0) {
+			if (firstpoint < 0) {
 				turn = 0;
-			} else {
+			}
+			if (firstpoint > 0) {
 				turn = 3;
 			}
+			if (firstpoint == 0) {
+				int a = Random.Range (0, 2);
+				if (a == 0) {
+					turn = 0;
+				} else {
+					turn = 3;
+				}
+			}
+		} else {
+			SyncVariables ();
 		}
+
+		instantiateposition [0] = new Vector3 (0, 0, 0);
+		instantiateposition [1] = new Vector3 (4, 0, 0);
+		instantiateposition [2] = new Vector3 (0, 7, 0);
+		instantiateposition [3] = new Vector3 (4, 7, 0);
 	}
 
 	// Update is called once per frame
 	void Update ()
 	{
+		if (Input.GetKeyDown ("space")) {
+			Debug.Log (FindObjectOfType<TurnManager> ().turn);
+			FindObjectOfType<TurnManager> ().turn += 1;
+		}
+
 		Debug.Log (turn);
-		instantiateposition [0] = new Vector3 (0, 0, 0);
-		instantiateposition [1] = new Vector3 (4, 0, 0);
-		instantiateposition [2] = new Vector3 (0, 7, 0);
-		instantiateposition [3] = new Vector3 (4, 7, 0);
+	    
+		if (PhotonNetwork.isMasterClient == true) {
+			
+		}
 
 		if (turn < 2) {
 			turntext.text = "Player1";
@@ -406,5 +425,19 @@ public class Turn : Photon.MonoBehaviour
 		} else {
 			return false;
 		}
+	}
+
+	void OnPhotonSerializeView (PhotonStream stream, PhotonMessageInfo info)
+	{
+		if (stream.isWriting) {
+			stream.SendNext (firstpoint);
+		} else {
+			currentfirstpoint = ((int)stream.ReceiveNext ());
+		}
+	}
+
+	void SyncVariables ()
+	{
+		this.firstpoint = currentfirstpoint;
 	}
 }
