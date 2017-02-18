@@ -137,7 +137,7 @@ public class Turn : Photon.MonoBehaviour
 	{
 		if (Input.GetKeyDown ("space")) {
 			Debug.Log (FindObjectOfType<TurnManager> ().turn);
-			FindObjectOfType<TurnManager> ().turn += 1;
+			FindObjectOfType<TurnManager> ().turn[1] += 1;
 		}
 
 		Debug.Log (turn);

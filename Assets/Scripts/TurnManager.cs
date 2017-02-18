@@ -4,7 +4,7 @@ using System.Collections;
 public class TurnManager : Photon.MonoBehaviour
 {
 	
-	public int turn;
+	public int[] turn = new int[3];
 	public int count;
 	public int[] counter = new int[2];
 	public int[] firstpoint = new int[2];
@@ -17,7 +17,7 @@ public class TurnManager : Photon.MonoBehaviour
 	public Vector3[] positionlog = new Vector3[3000];
 	public Vector3[] prepositionlog = new Vector3[3000];
 
-	int currentTurn;
+	int[] currentTurn = new int[3];
     int currentCount;
 	int[] currentCounter = new int[2];
 	int[] currentFirstpoint = new int[2];
@@ -46,7 +46,7 @@ public class TurnManager : Photon.MonoBehaviour
 //			stream.SendNext (positionlog);
 //			stream.SendNext (prepositionlog);
 		} else {
-			currentTurn = ((int)stream.ReceiveNext ());
+			currentTurn = ((int[])stream.ReceiveNext ());
 //			currentCount = ((int)stream.ReceiveNext ());
 //			currentCounter = ((int[])stream.ReceiveNext ());
 //			currentFirstpoint = ((int[])stream.ReceiveNext ());
@@ -96,9 +96,5 @@ public class TurnManager : Photon.MonoBehaviour
 		}
 	}
 
-	[PunRPC]
-	void GetTurnManager ()
-	{
-		
-	}
+
 }
