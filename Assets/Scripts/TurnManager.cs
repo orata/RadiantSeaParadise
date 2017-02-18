@@ -34,47 +34,47 @@ public class TurnManager : Photon.MonoBehaviour
 	{
 		if (stream.isWriting) {
 			stream.SendNext (turn);
-			stream.SendNext (count);
-			stream.SendNext (counter);
-			stream.SendNext (firstpoint);
-			stream.SendNext (timelimit);
-			stream.SendNext (countturn);
-			stream.SendNext (span);
-			stream.SendNext (killedstatus);
-			stream.SendNext (killedpiece);
-			stream.SendNext (piecelog);
-			stream.SendNext (positionlog);
-			stream.SendNext (prepositionlog);
+//			stream.SendNext (count);
+//			stream.SendNext (counter);
+//			stream.SendNext (firstpoint);
+//			stream.SendNext (timelimit);
+//			stream.SendNext (countturn);
+//			stream.SendNext (span);
+//			stream.SendNext (killedstatus);
+//			stream.SendNext (killedpiece);
+//			stream.SendNext (piecelog);
+//			stream.SendNext (positionlog);
+//			stream.SendNext (prepositionlog);
 		} else {
 			currentTurn = ((int)stream.ReceiveNext ());
-			currentCount = ((int)stream.ReceiveNext ());
-			currentCounter = ((int[])stream.ReceiveNext ());
-			currentFirstpoint = ((int[])stream.ReceiveNext ());
-			currentTimelimit = ((int)stream.ReceiveNext ());
-			currentCountturn = ((int)stream.ReceiveNext ());
-			currentSpan = ((int[])stream.ReceiveNext ());
-			currentKilledstatus = ((int[])stream.ReceiveNext ());
-			currentKilledpiece = ((bool[])stream.ReceiveNext ());
-			currentPiecelog = ((GameObject[])stream.ReceiveNext ());
-			currentPositionlog = ((Vector3[])stream.ReceiveNext ());
-			currentPrepositionlog = ((Vector3[])stream.ReceiveNext ());
+//			currentCount = ((int)stream.ReceiveNext ());
+//			currentCounter = ((int[])stream.ReceiveNext ());
+//			currentFirstpoint = ((int[])stream.ReceiveNext ());
+//			currentTimelimit = ((int)stream.ReceiveNext ());
+//			currentCountturn = ((int)stream.ReceiveNext ());
+//			currentSpan = ((int[])stream.ReceiveNext ());
+//			currentKilledstatus = ((int[])stream.ReceiveNext ());
+//			currentKilledpiece = ((bool[])stream.ReceiveNext ());
+//			currentPiecelog = ((GameObject[])stream.ReceiveNext ());
+//			currentPositionlog = ((Vector3[])stream.ReceiveNext ());
+//			currentPrepositionlog = ((Vector3[])stream.ReceiveNext ());
 		}
 	}
 
 	void SyncVariables ()
 	{
 		turn = currentTurn;
-		count = currentCount;
-		counter = currentCounter;
-		firstpoint = currentFirstpoint;
-		timelimit = currentTimelimit;
-		countturn = currentCountturn;
-		span = currentSpan;
-		killedstatus = currentKilledstatus;
-		killedpiece = currentKilledpiece;
-		piecelog = currentPiecelog;
-		positionlog = currentPositionlog;
-		prepositionlog = currentPrepositionlog;
+//		count = currentCount;
+//		counter = currentCounter;
+//		firstpoint = currentFirstpoint;
+//		timelimit = currentTimelimit;
+//		countturn = currentCountturn;
+//		span = currentSpan;
+//		killedstatus = currentKilledstatus;
+//		killedpiece = currentKilledpiece;
+//		piecelog = currentPiecelog;
+//		positionlog = currentPositionlog;
+//		prepositionlog = currentPrepositionlog;
 	}
 
 	// Use this for initialization
