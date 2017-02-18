@@ -135,12 +135,7 @@ public class Turn : Photon.MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetKeyDown ("space")) {
-			Debug.Log (FindObjectOfType<TurnManager> ().turn);
-			FindObjectOfType<TurnManager> ().turn[1] += 1;
-		}
-
-		Debug.Log (turn);
+		FindObjectOfType<TurnManager> ().turn = turn;
 	    
 		if (PhotonNetwork.isMasterClient == true) {
 			
