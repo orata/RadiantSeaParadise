@@ -466,4 +466,16 @@ public class Turn : Photon.MonoBehaviour
 			return false;
 		}
 	}
+
+	void ChangeOwnerShip(){
+		if(photonView.isMine){
+			GameObject[] playerInfos = GameObject.FindGameObjectsWithTag ("PlayerInfor");
+			PhotonView[] views = new PhotonView[playerInfos.Length];
+			for(int i = 0; i < playerInfos.Length; i++){
+				views[i] = playerInfos[i].GetComponent<PhotonView>;
+				Debug.Log (views [i].owner.ID);
+
+			}
+		};
+	}
 }
