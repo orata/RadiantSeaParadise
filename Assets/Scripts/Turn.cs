@@ -113,9 +113,11 @@ public class Turn : Photon.MonoBehaviour
 			}
 			if (firstpoint < 0) {
 				turn = 0;
+				turnManager.turn = turn;
 			} 
 			if (firstpoint > 0) {
 				turn = 3;
+				turnManager.turn = turn;
 			}
 			if (firstpoint == 0) {
 				int a = Random.Range (0, 2);
@@ -124,6 +126,7 @@ public class Turn : Photon.MonoBehaviour
 				} else {
 					turn = 3;
 				}
+				turnManager.turn = turn;
 			}
 		}
 
@@ -169,6 +172,7 @@ public class Turn : Photon.MonoBehaviour
 			} else {
 				turn = 7;
 			}
+			turnManager.turn = turn;
 		}
 
 		timetext.text = "制限時間" + timelimit;
@@ -187,6 +191,7 @@ public class Turn : Photon.MonoBehaviour
 					}
 				}
 				turn = 0;
+				turnManager.turn = turn;
 			} else {
 				if (killedpiece [countturn * 3 + count - 1] == true) {
 					for(int i = 0; i < 3; i++){
@@ -197,8 +202,10 @@ public class Turn : Photon.MonoBehaviour
 					}
 				}
 				turn = 3;
+				turnManager.turn = turn;
 			}
 			count--;
+			turnManager.count = count;
 		}
 
 		switch (turn) {
@@ -210,9 +217,11 @@ public class Turn : Photon.MonoBehaviour
 					if (moveObj.tag == "Player1") {
 						moveObjstatus = moveObj.gameObject.GetComponent<Status> ().status;
 						turn++;
+						turnManager.turn = turn;
 					}
 					if (moveObj.tag == "P1Instantiate" && counter[0] + span[0] < 3) {
 						turn = 2;
+						turnManager.turn = turn;
 					}
 				}
 			}
@@ -221,7 +230,11 @@ public class Turn : Photon.MonoBehaviour
 			if (count == 3) {
 				countturn++;
 				count = 0;
+				turnManager.count = count;
+				Debug.Log ("カウント同期");
 				turn = 3;
+				turnManager.turn = turn;
+				Debug.Log ("ターン同期");
 				span [0] = 0;
 				timelimit = 75;
 			}
@@ -250,7 +263,9 @@ public class Turn : Photon.MonoBehaviour
 							moveObj.transform.position = destinationObj.transform.position;
 							positionlog [countturn * 3 + count] = moveObj.transform.position;
 							count++;
+							turnManager.count = count;
 							turn = 0;
+							turnManager.turn = turn;
 						}
 						break;
 					case "Block":
@@ -260,7 +275,9 @@ public class Turn : Photon.MonoBehaviour
 							moveObj.transform.position = destinationObj.transform.position;
 							positionlog [countturn * 3 + count] = moveObj.transform.position;
 							count++;
+							turnManager.count = count;
 							turn = 0;
+							turnManager.turn = turn;
 						}
 						break;
 					case "Instantiate":
@@ -270,7 +287,9 @@ public class Turn : Photon.MonoBehaviour
 							moveObj.transform.position = destinationObj.transform.position;
 							positionlog [countturn * 3 + count] = moveObj.transform.position;
 							count++;
+							turnManager.count = count;
 							turn = 0;
+							turnManager.turn = turn;
 						}
 						break;
 					case "P2goal":
@@ -280,6 +299,7 @@ public class Turn : Photon.MonoBehaviour
 							moveObj.transform.position = destinationObj.transform.position;
 							positionlog [countturn * 3 + count] = moveObj.transform.position;
 							turn = 6;
+							turnManager.turn = turn;
 						}
 						break;
 					}
@@ -302,10 +322,12 @@ public class Turn : Photon.MonoBehaviour
 					if (moveObj.tag == "Player2") {
 						moveObjstatus = moveObj.gameObject.GetComponent<Status> ().status;
 						turn++;
+						turnManager.turn = turn;
 					}
 				}
 				if (moveObj.tag == "P2Instantiate" && counter[1] + span[1] < 3) {
 					turn = 5;
+					turnManager.turn = turn;
 				}
 			}
 
@@ -314,6 +336,10 @@ public class Turn : Photon.MonoBehaviour
 				countturn++;
 				count = 0;
 				turn = 0;
+				turnManager.count = count;
+				Debug.Log ("カウント同期");
+				turnManager.turn = turn;
+				Debug.Log ("ターン同期");
 				span [1] = 0;
 				timelimit = 75;
 			}
@@ -343,7 +369,9 @@ public class Turn : Photon.MonoBehaviour
 							moveObj.transform.position = destinationObj.transform.position;
 							positionlog [countturn * 3 + count] = moveObj.transform.position;
 							count++;
+							turnManager.count = count;
 							turn = 3;
+							turnManager.turn = turn;
 						}
 						break;
 					case "Block":
@@ -353,7 +381,9 @@ public class Turn : Photon.MonoBehaviour
 							moveObj.transform.position = destinationObj.transform.position;
 							positionlog [countturn * 3 + count] = moveObj.transform.position;
 							count++;
+							turnManager.count = count;
 							turn = 3;
+							turnManager.turn = turn;
 						}
 						break;
 					case "Instantiate":
@@ -363,7 +393,9 @@ public class Turn : Photon.MonoBehaviour
 							moveObj.transform.position = destinationObj.transform.position;
 							positionlog [countturn * 3 + count] = moveObj.transform.position;
 							count++;
+							turnManager.count = count;
 							turn = 0;
+							turnManager.turn = turn;
 						}
 						break;
 					case "P1goal":
@@ -373,6 +405,7 @@ public class Turn : Photon.MonoBehaviour
 							moveObj.transform.position = destinationObj.transform.position;
 							positionlog [countturn * 3 + count] = moveObj.transform.position;
 							turn = 7;
+							turnManager.turn = turn;
 						}
 						break;
 					}
