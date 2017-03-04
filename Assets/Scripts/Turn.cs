@@ -6,7 +6,7 @@ public class Turn : Photon.MonoBehaviour
 {
 	
 	public int turn;
-	public int count = 3;
+	public int count;
 	public int[] counter = new int[2];
 	public int currentfirstpoint;
 	int moveObjstatus;
@@ -52,34 +52,34 @@ public class Turn : Photon.MonoBehaviour
 		RSP [1] = "Scissors";
 		RSP [2] = "Paper";
 		//ブロック生成
-			for (int i = 0; i < 8; i++) {
-				for (int j = 0; j < 5; j++) {
-					GameObject obj = Instantiate (block, new Vector3 (j, i, 0), Quaternion.identity) as GameObject;
-					obj.name = "block" + i.ToString () + j.ToString ();
-					if (obj.name == "block00" || obj.name == "block04") {
-						obj.tag = "P1Instantiate";
-					}
-					if (obj.name == "block70" || obj.name == "block74") {
-						obj.tag = "P2Instantiate";
-					}
-					if (obj.name == "block02") {
-						obj.tag = "P1goal";
-						obj.GetComponent<Renderer> ().material.color = Color.yellow;
-					}
-					if (obj.name == "block72") {
-						obj.tag = "P2goal";
-						obj.GetComponent<Renderer> ().material.color = Color.yellow;
-					}
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 5; j++) {
+				GameObject obj = Instantiate (block, new Vector3 (j, i, 0), Quaternion.identity) as GameObject;
+				obj.name = "block" + i.ToString () + j.ToString ();
+				if (obj.name == "block00" || obj.name == "block04") {
+					obj.tag = "P1Instantiate";
+				}
+				if (obj.name == "block70" || obj.name == "block74") {
+					obj.tag = "P2Instantiate";
+				}
+				if (obj.name == "block02") {
+					obj.tag = "P1goal";
+					obj.GetComponent<Renderer> ().material.color = Color.yellow;
+				}
+				if (obj.name == "block72") {
+					obj.tag = "P2goal";
+					obj.GetComponent<Renderer> ().material.color = Color.yellow;
 				}
 			}
+		}
 
-			firstposition [0] = new Vector3 (1, 0, 0);
-			firstposition [1] = new Vector3 (2, 1, 0);
-			firstposition [2] = new Vector3 (3, 0, 0);
-			firstposition [3] = new Vector3 (1, 7, 0);
-			firstposition [4] = new Vector3 (2, 6, 0);
-			firstposition [5] = new Vector3 (3, 7, 0);
-			//グーチョキパー生成
+		firstposition [0] = new Vector3 (1, 0, 0);
+		firstposition [1] = new Vector3 (2, 1, 0);
+		firstposition [2] = new Vector3 (3, 0, 0);
+		firstposition [3] = new Vector3 (1, 7, 0);
+		firstposition [4] = new Vector3 (2, 6, 0);
+		firstposition [5] = new Vector3 (3, 7, 0);
+		//グーチョキパー生成
 		if (photonView.isMine) {
 			for (int a = 0; a < 2; a++) {
 				int c = 0;
@@ -136,7 +136,8 @@ public class Turn : Photon.MonoBehaviour
 		instantiateposition [3] = new Vector3 (4, 7, 0);
 	}
 
-	IEnumerator Init(){
+	IEnumerator Init ()
+	{
 		Debug.Log ("TurnManagerを探しはじめました");
 		for (;;) {
 			if (FindObjectOfType<TurnManager> () != null) {
@@ -151,6 +152,7 @@ public class Turn : Photon.MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{ 
+		Debug.Log (count);
 
 		if (turn < 2) {
 			turnplayertext.text = "Player1";
@@ -180,9 +182,9 @@ public class Turn : Photon.MonoBehaviour
 			piecelog [countturn * 3 + count - 1].transform.position = prepositionlog [countturn * 3 + count - 1];
 			if (turn <= 2) {
 				if (killedpiece [countturn * 3 + count - 1] == true) {
-					for(int i = 0; i < 3; i++){
+					for (int i = 0; i < 3; i++) {
 						if (killedstatus [countturn * 3 + count - 1] == i) {
-							GameObject obj = PhotonNetwork.Instantiate (RSP [i], positionlog [countturn * 3 + count - 1], Quaternion.Euler (0, 180, 0),0) as GameObject;
+							GameObject obj = PhotonNetwork.Instantiate (RSP [i], positionlog [countturn * 3 + count - 1], Quaternion.Euler (0, 180, 0), 0) as GameObject;
 							obj.tag = "Player2";
 						}
 					}
@@ -191,9 +193,9 @@ public class Turn : Photon.MonoBehaviour
 				turnManager.turn = turn;
 			} else {
 				if (killedpiece [countturn * 3 + count - 1] == true) {
-					for(int i = 0; i < 3; i++){
+					for (int i = 0; i < 3; i++) {
 						if (killedstatus [countturn * 3 + count - 1] == i) {
-							GameObject obj = PhotonNetwork.Instantiate (RSP [i], positionlog [countturn * 3 + count - 1], Quaternion.identity,0) as GameObject;
+							GameObject obj = PhotonNetwork.Instantiate (RSP [i], positionlog [countturn * 3 + count - 1], Quaternion.identity, 0) as GameObject;
 							obj.tag = "Player1";
 						}
 					}
@@ -216,7 +218,7 @@ public class Turn : Photon.MonoBehaviour
 						turn++;
 						turnManager.turn = turn;
 					}
-					if (moveObj.tag == "P1Instantiate" && counter[0] + span[0] < 3) {
+					if (moveObj.tag == "P1Instantiate" && counter [0] + span [0] < 3) {
 						turn = 2;
 						turnManager.turn = turn;
 					}
@@ -305,9 +307,9 @@ public class Turn : Photon.MonoBehaviour
 			break;
 		case 2:
                 //グーチョキパー生成
-			instantiatebutton[0].gameObject.SetActive (true);
-			instantiatebutton[1].gameObject.SetActive (true);
-			instantiatebutton[2].gameObject.SetActive (true);
+			instantiatebutton [0].gameObject.SetActive (true);
+			instantiatebutton [1].gameObject.SetActive (true);
+			instantiatebutton [2].gameObject.SetActive (true);
 
 			break;
 		case 3:
@@ -321,7 +323,7 @@ public class Turn : Photon.MonoBehaviour
 						turnManager.turn = turn;
 					}
 				}
-				if (moveObj.tag == "P2Instantiate" && counter[1] + span[1] < 3) {
+				if (moveObj.tag == "P2Instantiate" && counter [1] + span [1] < 3) {
 					turn = 5;
 					turnManager.turn = turn;
 				}
@@ -336,6 +338,8 @@ public class Turn : Photon.MonoBehaviour
 				turnManager.turn = turn;
 				span [1] = 0;
 				timelimit = 75;
+				Debug.Log ("B");
+
 				ChangeOwnerShip ();
 			}
 
@@ -410,23 +414,23 @@ public class Turn : Photon.MonoBehaviour
 			break;
 		case 5:
                 //グーチョキパー生成
-			instantiatebutton[0].gameObject.SetActive (true);
-			instantiatebutton[1].gameObject.SetActive (true);
-			instantiatebutton[2].gameObject.SetActive (true);
+			instantiatebutton [0].gameObject.SetActive (true);
+			instantiatebutton [1].gameObject.SetActive (true);
+			instantiatebutton [2].gameObject.SetActive (true);
 
 			break;
 		case 6:
 			result.text = "P1win!";
 			result.gameObject.SetActive (true);
-			button[0].gameObject.SetActive (true);
-			button[1].gameObject.SetActive (true);
+			button [0].gameObject.SetActive (true);
+			button [1].gameObject.SetActive (true);
 
 			break;
 		case 7:
 			result.text = "P2win!";
 			result.gameObject.SetActive (true);
-			button[0].gameObject.SetActive (true);
-			button[1].gameObject.SetActive (true);
+			button [0].gameObject.SetActive (true);
+			button [1].gameObject.SetActive (true);
 			break;
 		}
 	}
@@ -462,8 +466,9 @@ public class Turn : Photon.MonoBehaviour
 		}
 	}
 
-	void ChangeOwnerShip(){
-		if(photonView.isMine){
+	void ChangeOwnerShip ()
+	{
+		if (photonView.isMine) {
 			PhotonPlayer[] player = PhotonNetwork.playerList;
 
 			for (int i = 0; i < player.Length; i++) {
@@ -471,7 +476,6 @@ public class Turn : Photon.MonoBehaviour
 				if (PhotonNetwork.player.ID != player [i].ID) {
 					turnManager.GetComponent<PhotonView> ().TransferOwnership (player [i].ID);
 				}
-				Debug.Log ("hoge");
 			}
 		}
 	}
