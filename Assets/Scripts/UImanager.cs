@@ -20,7 +20,8 @@ public class UImanager : Photon.MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		turn = camera.GetComponent<Turn> ().turn;
+		count = camera.GetComponent<Turn> ().count;
 	}
 
 	IEnumerator Init(){
@@ -50,12 +51,11 @@ public class UImanager : Photon.MonoBehaviour {
 		}
 		if (timelimit <= 0) {
 			if (turnManager.turn > 2) {
-				camera.GetComponent<Turn> ().turn = 6;
+				turn = 6;
 			} else {
-				camera.GetComponent<Turn> ().turn = 7;
+				turn = 7;
 			}
 		}
-		count = camera.GetComponent<Turn> ().count;
 
 		timetext.text = "制限時間" + timelimit;
 		counttext.text = 1 + count + "手目";
@@ -92,15 +92,15 @@ public class UImanager : Photon.MonoBehaviour {
 
 	void Instantiate () {
 		GameObject obj1 = PhotonNetwork.Instantiate ("RSP [RSPnumber]", GetComponent<Camera>().GetComponent<Turn> ().moveObj.transform.position, Quaternion.identity,0) as GameObject;
-		camera.GetComponent<Turn> ().count++;
-		if (camera.GetComponent<Turn> ().turn < 3) {
+		count++;
+		if (turnManager.turn < 3) {
 			obj1.tag = "Player1";
 			camera.GetComponent<Turn> ().counter [0]++;
-			camera.GetComponent<Turn> ().turn = 0;
+			turn = 0;
 		} else {
 			obj1.tag = "Player2";
 			camera.GetComponent<Turn> ().counter [1]++;
-			camera.GetComponent<Turn> ().turn = 3;
+			turn = 3;
 			obj1.transform.eulerAngles = new Vector3 (0, 0, 180);
 		}
 		for (int i = 0; i < 3; i++) {
