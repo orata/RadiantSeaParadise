@@ -19,7 +19,7 @@ public class Turn : Photon.MonoBehaviour
 	public int[] killedstatus = new int[3000];
 	float timer;
 	public string[] RSP = new string[3];
-	public GameObject block; 
+	public GameObject block;
 	public GameObject[] button = new GameObject[2];
 	public GameObject[] instantiatebutton = new GameObject[3];
 	public GameObject TurnManager;
@@ -33,7 +33,7 @@ public class Turn : Photon.MonoBehaviour
 	Vector3[] instantiateposition = new Vector3[4];
 	public Vector3[] positionlog = new Vector3[3000];
 	public Vector3[] prepositionlog = new Vector3[3000];
-	public Text turntext;
+	public Text turnplayertext;
 	public Text timetext;
 	public Text counttext;
 	public Text result;
@@ -148,11 +148,14 @@ public class Turn : Photon.MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{ 
+		if (Input.GetKeyDown("space")) {
+			FindObjectOfType<TurnManager> ().turn++;
+		}
 
 		if (turn < 2) {
-			turntext.text = "Player1";
+			turnplayertext.text = "Player1";
 		} else {
-			turntext.text = "Player2";
+			turnplayertext.text = "Player2";
 		}
 
 		timer += Time.deltaTime;
@@ -170,6 +173,7 @@ public class Turn : Photon.MonoBehaviour
 
 		timetext.text = "制限時間" + timelimit;
 		counttext.text = 1 + count + "手目";
+
 
 		if (Input.GetKeyDown ("b") && count > 0) {
 			piecelog [countturn * 3 + count - 1].transform.position = prepositionlog [countturn * 3 + count - 1];
