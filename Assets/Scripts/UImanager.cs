@@ -1,24 +1,69 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UImanager : Photon.MonoBehaviour {
 	public GameObject camera;
 	public GameObject[] RSP = new GameObject[3];
+	public Text turnplayertext;
+	public Text timetext;
+	public Text counttext;
+	public Text result;
+	int turn;
+	int count;
 	int RSPnumber;
+	int timelimit;
+	float timer;
+
+	TurnManager turnManager;
 
 	// Use this for initialization
 	void Start () {
 	
 	}
-	
+
+	IEnumerator Init(){
+		Debug.Log ("TurnManagerを探しはじめました");
+		for (;;) {
+			if (FindObjectOfType<TurnManager> () != null) {
+				turnManager = FindObjectOfType<TurnManager> ();
+				break;
+			}
+			yield return new WaitForSeconds (0.1f);
+		}
+		Debug.Log ("TurnManagerを発見しました");
+	}
+
 	// Update is called once per frame
 	void Update () {
-	
+		if (turnManager.turn < 2) {
+			turnplayertext.text = "Player1";
+		} else {
+			turnplayertext.text = "Player2";
+		}
+
+		timer += Time.deltaTime;
+		if (timer >= 1) {
+			timelimit -= 1;
+			timer = 0;
+		}
+		if (timelimit <= 0) {
+			if (turnManager.turn > 2) {
+				camera.GetComponent<Turn> ().turn = 6;
+			} else {
+				camera.GetComponent<Turn> ().turn = 7;
+			}
+		}
+		count = camera.GetComponent<Turn> ().count;
+
+		timetext.text = "制限時間" + timelimit;
+		counttext.text = 1 + count + "手目";
+
 	}
 
 	public void StartButton () {
-		SceneManager.LoadScene ("Battle");
+		SceneManager.LoadScene ("Room");
 	}
 
 	public void BackButton () {
