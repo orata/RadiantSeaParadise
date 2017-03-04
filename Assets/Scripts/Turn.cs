@@ -151,9 +151,6 @@ public class Turn : Photon.MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{ 
-		if (Input.GetKeyDown("space")) {
-			FindObjectOfType<TurnManager> ().turn++;
-		}
 
 		if (turn < 2) {
 			turnplayertext.text = "Player1";
@@ -231,12 +228,11 @@ public class Turn : Photon.MonoBehaviour
 				countturn++;
 				count = 0;
 				turnManager.count = count;
-				Debug.Log ("カウント同期");
 				turn = 3;
 				turnManager.turn = turn;
-				Debug.Log ("ターン同期");
 				span [0] = 0;
 				timelimit = 75;
+				ChangeOwnerShip ();
 			}
 
 			break;
@@ -337,11 +333,10 @@ public class Turn : Photon.MonoBehaviour
 				count = 0;
 				turn = 0;
 				turnManager.count = count;
-				Debug.Log ("カウント同期");
 				turnManager.turn = turn;
-				Debug.Log ("ターン同期");
 				span [1] = 0;
 				timelimit = 75;
+				ChangeOwnerShip ();
 			}
 
 			break;
@@ -469,13 +464,15 @@ public class Turn : Photon.MonoBehaviour
 
 	void ChangeOwnerShip(){
 		if(photonView.isMine){
-			GameObject[] playerInfos = GameObject.FindGameObjectsWithTag ("PlayerInfor");
-			PhotonView[] views = new PhotonView[playerInfos.Length];
-			for(int i = 0; i < playerInfos.Length; i++){
-				views[i] = playerInfos[i].GetComponent<PhotonView>;
-				Debug.Log (views [i].owner.ID);
+			PhotonPlayer[] player = PhotonNetwork.playerList;
 
+			for (int i = 0; i < player.Length; i++) {
+
+				if (PhotonNetwork.player.ID != player [i].ID) {
+					turnManager.GetComponent<PhotonView> ().TransferOwnership (player [i].ID);
+				}
+				Debug.Log ("hoge");
 			}
-		};
+		}
 	}
 }
